@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RssFeed</string>
+    <string name="action_back">Back</string>
+    <string name="action_forward">Forward</string>
+    <string name="action_bookmark">Bookmark</string>
+    <string name="action_settings">Settings</string>
+</resources>
