@@ -26,7 +26,7 @@
                     android:id="@+id/rssFeedEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Rss feed source" />
+                    android:hint="Enter a RSS feed" />
 
             </android.support.design.widget.TextInputLayout>
 

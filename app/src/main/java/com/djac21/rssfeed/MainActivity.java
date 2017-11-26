@@ -1,5 +1,6 @@
 package com.djac21.rssfeed;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +14,7 @@ import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -56,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new FetchFeedTask().execute((Void) null);
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(fetchFeedButton.getWindowToken(), 0);
+                    }
+                }
+
             }
         });
 
@@ -65,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 new FetchFeedTask().execute((Void) null);
             }
         });
-        new FetchFeedTask().execute((Void) null);
     }
 
     public List<RssFeedModel> parseFeed(InputStream inputStream) throws XmlPullParserException, IOException {
