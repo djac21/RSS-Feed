@@ -1,5 +1,6 @@
 package com.djac21.rssfeed;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -57,21 +60,20 @@ public class MainActivity extends AppCompatActivity {
         fetchFeedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FetchFeedTask().execute((Void) null);
+                new GetData().execute((Void) null);
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(fetchFeedButton.getWindowToken(), 0);
                     }
                 }
-
             }
         });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new FetchFeedTask().execute((Void) null);
+                new GetData().execute((Void) null);
             }
         });
     }
@@ -117,13 +119,12 @@ public class MainActivity extends AppCompatActivity {
                     xmlPullParser.nextTag();
                 }
 
-                if (name.equalsIgnoreCase("title")) {
+                if (name.equalsIgnoreCase("title"))
                     title = result;
-                } else if (name.equalsIgnoreCase("link")) {
+                else if (name.equalsIgnoreCase("link"))
                     link = result;
-                } else if (name.equalsIgnoreCase("description")) {
+                else if (name.equalsIgnoreCase("description"))
                     description = result;
-                }
 
                 if (title != null && link != null && description != null) {
                     if (isItem) {
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {
+    private class GetData extends AsyncTask<Void, Void, Boolean> {
         private String urlLink;
 
         @Override
@@ -194,5 +195,27 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Enter a valid Rss feed url", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_about) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("About")
+                    .setMessage("Enter a RSS feed URL and upon clicking the respected card the internal browser will be launched")
+                    .setPositiveButton("OK", null);
+            builder.create().show();
+        } else if (id == R.id.action_refresh) {
+            new GetData().execute();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

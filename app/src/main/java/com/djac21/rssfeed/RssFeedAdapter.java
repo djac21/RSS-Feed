@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.djac21.rssfeed.CustomTabs.CustomTabActivityHelper;
 import com.djac21.rssfeed.CustomTabs.WebViewActivity;
-import com.djac21.rssfeed.RssFeedModel;
 
 import java.util.List;
 
