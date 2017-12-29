@@ -12,14 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-
+    private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView recyclerView;
     private EditText rssFeeEditText;
     private FloatingActionButton fetchFeedButton;
@@ -42,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView feedTitleTextView, feedLinkTextView, feedDescriptionTextView;
     private List<RssFeedModel> mFeedModelList;
     private String feedTitle, feedLink, feedDescription;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         feedTitleTextView = findViewById(R.id.feedTitle);
         feedDescriptionTextView = findViewById(R.id.feedDescription);
         feedLinkTextView = findViewById(R.id.feedLink);
+        progressBar = findViewById(R.id.progressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         fetchFeedButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                Log.d("MainActivity", "Parsing name ==> " + name);
                 String result = "";
                 if (xmlPullParser.next() == XmlPullParser.TEXT) {
                     result = xmlPullParser.getText();
@@ -153,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             swipeRefreshLayout.setRefreshing(true);
+            progressBar.setVisibility(View.VISIBLE);
             feedTitle = null;
             feedLink = null;
             feedDescription = null;
@@ -186,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             swipeRefreshLayout.setRefreshing(false);
+            progressBar.setVisibility(View.GONE);
             if (success) {
                 feedTitleTextView.setText("Feed Title: " + feedTitle);
                 feedDescriptionTextView.setText("Feed Description: " + feedDescription);
