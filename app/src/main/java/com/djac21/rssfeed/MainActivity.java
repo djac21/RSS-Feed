@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
                 new GetData().execute((Void) null);
             }
         });
@@ -150,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            swipeRefreshLayout.setRefreshing(true);
             progressBar.setVisibility(View.VISIBLE);
             feedTitle = null;
             feedLink = null;
